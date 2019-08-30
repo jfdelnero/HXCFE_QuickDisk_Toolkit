@@ -112,7 +112,7 @@ void printbuf(void * buf,int size)
 			j = 0;
 		}
 
-		snprintf(tmp, sizeof(tmp), "%02X", ptr[i]);
+		sprintf(tmp, "%02X", ptr[i]);
 		memcpy(&str[j*3],tmp,2);
 
 		if( is_printable_char(ptr[i]) )

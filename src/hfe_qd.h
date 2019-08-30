@@ -25,6 +25,8 @@
 //
 */
 
+#pragma pack(1)
+
 typedef struct qdhfefileformatheader_
 {
 	unsigned char HEADERSIGNATURE[8]; //HXCQDDRV
@@ -36,7 +38,7 @@ typedef struct qdhfefileformatheader_
 	unsigned int bitRate;   // (cells rate / s)
 	unsigned int flags;
 	unsigned int track_list_offset;
-}__attribute__ ((__packed__)) qdhfefileformatheader;
+} qdhfefileformatheader;
 
 typedef struct qdtrack_
 {
@@ -44,8 +46,9 @@ typedef struct qdtrack_
 	unsigned int track_len;
 	unsigned int start_sw_position;
 	unsigned int stop_sw_position;
-}__attribute__ ((__packed__)) qdtrack;
+}qdtrack;
 
+#pragma pack()
 
 unsigned char * generate_hfe_qd(unsigned int cellseconds, unsigned int tracklen, unsigned int start_sw_pos, unsigned int ready_len, unsigned int *filesize);
 unsigned int time_to_bitofs(unsigned int cellseconds, unsigned int time);

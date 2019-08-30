@@ -79,7 +79,7 @@ int qdsector[400] =
 
 unsigned char * load_mo5_trk(char * infile, unsigned int * outbuffersize)
 {
-	int i,j,k;
+	unsigned int i,j,k;
 	FILE *f;
 	unsigned char * outbuffer,sum;
 	unsigned char * mfmbuffer;

@@ -86,7 +86,8 @@ static unsigned short checkcrc(unsigned char * buffer,int size)
 
 int check_roland_qd(char * filename)
 {
-	int i,block,m;
+	unsigned int i;
+	int block,m;
 	FILE *f;
 	FILE *f2;
 	FILE *f3;

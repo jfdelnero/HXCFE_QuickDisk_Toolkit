@@ -43,7 +43,7 @@
 
 unsigned int time_to_bitofs(unsigned int cellseconds, unsigned int time)
 {
-	return 	((float)cellseconds) * (float)((float)time/(float)1000);
+	return  (unsigned int)(((float)cellseconds) * (float)((float)time/(float)1000));
 }
 
 // cellseconds -> cell/s
