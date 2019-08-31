@@ -44,8 +44,7 @@
 #include "trk_utils.h"
 
 #define DEFAULT_NUMBER_OF_CHANNELS 1
-#define BUFFER_SIZE (1024*1024)
-#define DEFAULT_SAMPLERATE 24000
+#define DEFAULT_SAMPLERATE 30000
 
 #pragma pack(1)
 
@@ -101,7 +100,6 @@ int check_roland_qd(char * filename)
 	unsigned short val1,val2;
 	unsigned short * wave;
 	wav_hdr wavhdr;
-	unsigned int samplerate;
 	qdhfefileformatheader * header_ptr;
 	qdtrack * track_ptr;
 
@@ -250,7 +248,6 @@ int check_roland_qd(char * filename)
 							}
 
 							memset(&wavhdr,0,sizeof(wavhdr));
-							samplerate = 30000;
 							printf("Saving sample.wav...\n");
 							f3 = fopen("sample.wav","wb");
 							if(f3)
@@ -260,10 +257,10 @@ int check_roland_qd(char * filename)
 								memcpy((char*)&wavhdr.fmt,"fmt ",4);
 								wavhdr.Subchunk1Size = 16;
 								wavhdr.AudioFormat = 1;
-								wavhdr.NumOfChan = 1;
-								wavhdr.SamplesPerSec = samplerate;
+								wavhdr.NumOfChan = DEFAULT_NUMBER_OF_CHANNELS;
+								wavhdr.SamplesPerSec = DEFAULT_SAMPLERATE;
 								wavhdr.bitsPerSample = 16;
-								wavhdr.bytesPerSec = ((samplerate*wavhdr.bitsPerSample)/8);
+								wavhdr.bytesPerSec = ((DEFAULT_SAMPLERATE*wavhdr.bitsPerSample)/8);
 								wavhdr.blockAlign = (wavhdr.bitsPerSample/8);
 								memcpy((char*)&wavhdr.Subchunk2ID,"data",4);
 
