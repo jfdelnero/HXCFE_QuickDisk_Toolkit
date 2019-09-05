@@ -117,7 +117,7 @@ void printhelp(char* argv[])
 	printf("  -loadmo5qd \t\t\t: Load Thomson MO5 QD file\n");
 	printf("  -generate \t\t\t: Generate a HxC QD file\n");
 	printf("  -checkmo5qd \t\t\t: Test a MO5 formatted HxC QD file\n");
-	printf("  -checkrolandqd \t\t\t: Test a Roland formatted HxC QD file\n");
+	printf("  -checkrolandqd \t\t: Test a Roland formatted HxC QD file\n");
 	printf("  -checkakaiqd \t\t\t: Test a Akai formatted HxC QD file\n");
 	printf("  -help \t\t\t: This help\n");
 	printf("\n");
