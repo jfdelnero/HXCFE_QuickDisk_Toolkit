@@ -146,7 +146,7 @@ int main(int argc, char* argv[])
 	verbose=0;
 	inbuffer = NULL;
 
-	printf("HxC Floppy Emulator : QD Floppy image file tool v0.0.1.1\n");
+	printf("HxC Floppy Emulator : QD Floppy image file tool v0.0.2.1\n");
 	printf("Copyright (C) 2006-2019 Jean-Francois DEL NERO\n");
 	printf("This program comes with ABSOLUTELY NO WARRANTY\n");
 	printf("This is free software, and you are welcome to redistribute it\n");
