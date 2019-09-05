@@ -42,6 +42,7 @@
 
 #include "qd_mo5.h"
 #include "qd_roland.h"
+#include "qd_akai.h"
 
 int verbose;
 
@@ -117,8 +118,8 @@ void printhelp(char* argv[])
 	printf("  -generate \t\t\t: Generate a HxC QD file\n");
 	printf("  -checkmo5qd \t\t\t: Test a MO5 formatted HxC QD file\n");
 	printf("  -checkrolandqd \t\t\t: Test a Roland formatted HxC QD file\n");
+	printf("  -checkakaiqd \t\t\t: Test a Akai formatted HxC QD file\n");
 	printf("  -help \t\t\t: This help\n");
-
 	printf("\n");
 }
 
@@ -288,6 +289,11 @@ int main(int argc, char* argv[])
 		check_roland_qd(filename);
 	}
 
+	if(isOption(argc,argv,"checkakaiqd",(char*)&filename)>0)
+	{
+		check_akai_qd(filename);
+	}
+
 	if( (isOption(argc,argv,"help",0)<=0) &&
 		(isOption(argc,argv,"qdtrklen",0)<=0) &&
 		(isOption(argc,argv,"qdstartsw",0)<=0) &&
@@ -297,6 +303,7 @@ int main(int argc, char* argv[])
 		(isOption(argc,argv,"loadmo5qd",0)<=0) &&
 		(isOption(argc,argv,"checkmo5qd",0)<=0) &&
 		(isOption(argc,argv,"checkrolandqd",0)<=0) &&
+		(isOption(argc,argv,"checkakaiqd",0)<=0) &&
 		(isOption(argc,argv,"generate",0)<=0)
 		)
 	{

@@ -28,7 +28,7 @@ EXEC=qdhxcfe
 
 all: $(EXEC)
 
-qdhxcfe:  qdhxcfe.o utils.o hfe_qd.o trk_utils.o qd_mo5.o qd_roland.o crc.o
+qdhxcfe:  qdhxcfe.o utils.o hfe_qd.o trk_utils.o qd_mo5.o qd_roland.o qd_akai.o crc.o
 	$(CC) -o $@    $^ $(LDFLAGS)
 
 qdhxcfe.o: ../src/qdhxcfe.c
@@ -47,6 +47,9 @@ qd_mo5.o: ../src/qd_mo5.c
 	$(CC) -o $@ -c $< $(CFLAGS)
 
 qd_roland.o: ../src/qd_roland.c
+	$(CC) -o $@ -c $< $(CFLAGS)
+
+qd_akai.o: ../src/qd_akai.c
 	$(CC) -o $@ -c $< $(CFLAGS)
 
 crc.o: ../src/crc.c
