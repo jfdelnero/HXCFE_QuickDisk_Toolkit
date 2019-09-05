@@ -97,6 +97,10 @@ SOURCE=..\src\hfe_qd.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\src\qd_akai.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\src\qd_mo5.c
 # End Source File
 # Begin Source File
@@ -129,6 +133,10 @@ SOURCE=..\src\hfe_qd.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\src\qd_akai.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\src\qd_mo5.h
 # End Source File
 # Begin Source File
@@ -142,6 +150,10 @@ SOURCE=..\src\trk_utils.h
 # Begin Source File
 
 SOURCE=..\src\utils.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\wave.h
 # End Source File
 # End Group
 # Begin Group "Resource Files"
