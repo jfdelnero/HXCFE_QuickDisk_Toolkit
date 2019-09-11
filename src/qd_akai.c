@@ -48,6 +48,9 @@
 #define DEFAULT_NUMBER_OF_CHANNELS 1
 #define DEFAULT_SAMPLERATE 32000
 
+#define S612_FORMAT 0
+#define S700_FORMAT 1
+
 static unsigned short checkcrc(unsigned char * buffer,int size)
 {
 	unsigned char CRC16_High,CRC16_Low;
@@ -77,7 +80,7 @@ int check_akai_qd(char * filename)
 	unsigned char * file;
 	unsigned char * test_buf;
 	unsigned char syncword[32];
-	int position,offset;
+	int position,offset,subformat,tracksize,samplerate;
 	unsigned short val1;
 	unsigned short * wave;
 	wav_hdr wavhdr;
@@ -161,8 +164,23 @@ int check_akai_qd(char * filename)
 
 				printf("\nBlock : cell offset %d (0x%X offset)(%f ms)\n",found,found/8,((float)found/(float)header_ptr->bitRate)*1000);
 
+				if( !memcmp(&test_buf[8],"S700 FORMAT",11) )
+				{
+					printf("Akai S700 format\n");
+					subformat = S700_FORMAT;
+					tracksize = 0xC0BD;
+					samplerate = 22050;
+				}
+				else
+				{
+					printf("Akai S612 format\n");
+					subformat = S612_FORMAT;
+					tracksize = 0xFC23;
+					samplerate = DEFAULT_SAMPLERATE;
+				}
+
 				printbuf(test_buf,0xA0);
-				if(checkcrc(&test_buf[7],0xFC23))
+				if(checkcrc(&test_buf[7],tracksize))
 				{
 					printf(">>>>>> BAD CRC :( !\n");
 				}
@@ -174,16 +192,42 @@ int check_akai_qd(char * filename)
 				wave = malloc(64*1024*2);
 				memset(wave,0,64*1024*2);
 
-				m = 0;
-				offset = 0x28;
-				for(i=0;i< (0xFC00/2);i++)
+				switch(subformat)
 				{
-					position = i * 2;
-					val1 = (((unsigned short)test_buf[offset+position + 1 ] << 8) | ((test_buf[offset+position + 0 ] >>0)))>>4;
-					if(val1 & 0x0800)
-						val1 |= 0xF000;
+					case S612_FORMAT:
+						m = 0;
+						offset = 0x28;
+						for(i=0;i< (0xFC00/2);i++)
+						{
+							position = i * 2;
+							val1 = (((unsigned short)test_buf[offset+position + 1 ] << 8) | ((test_buf[offset+position + 0 ] >>0)))>>4;
+							if(val1 & 0x0800)
+								val1 |= 0xF000;
 
-					wave[m++] = (val1<<4) + 0x8000;
+							wave[m++] = (val1<<4) + 0x8000;
+						}
+					break;
+
+					case S700_FORMAT:
+						m = 0;
+						offset = 0xC2;
+						for(i=0;i< (0x8000);i++)
+						{
+							val1 = ((unsigned short)test_buf[offset+ 0x4000 + i ] << 4);
+
+							// Note : Unsure about the low bits order, to be checked with a low frequency ramp sound.
+							if(i&1)
+								val1 |= ((unsigned short)test_buf[offset + (i>>1) ] >> 4) & 0xF;
+							else
+								val1 |= ((unsigned short)test_buf[offset + (i>>1) ] >> 0) & 0xF;
+
+							if(val1 & 0x0800)
+								val1 |= 0xF000;
+
+							wave[m++] = (val1<<4) + 0x8000;
+						}
+					break;
+
 				}
 
 				memset(&wavhdr,0,sizeof(wavhdr));
@@ -197,9 +241,9 @@ int check_akai_qd(char * filename)
 					wavhdr.Subchunk1Size = 16;
 					wavhdr.AudioFormat = 1;
 					wavhdr.NumOfChan = DEFAULT_NUMBER_OF_CHANNELS;
-					wavhdr.SamplesPerSec = DEFAULT_SAMPLERATE;
+					wavhdr.SamplesPerSec = samplerate;
 					wavhdr.bitsPerSample = 16;
-					wavhdr.bytesPerSec = ((DEFAULT_SAMPLERATE*wavhdr.bitsPerSample)/8);
+					wavhdr.bytesPerSec = ((samplerate*wavhdr.bitsPerSample)/8);
 					wavhdr.blockAlign = (wavhdr.bitsPerSample/8);
 					memcpy((char*)&wavhdr.Subchunk2ID,"data",4);
 
