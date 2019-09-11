@@ -215,6 +215,7 @@ int check_roland_qd(char * filename)
 							offset = 0xEF;
 							for(i=0;i< (32722/2);i++)
 							{
+								// Note : Unsure about the low bits order, to be checked with a low frequency ramp sound.
 								position = i * 3;
 								val1 = ((unsigned short)test_buf[offset+position + 0 ] << 4) | ((test_buf[offset+position + 3 ] >>0) & 0xF);
 								if(val1 & 0x0800)
