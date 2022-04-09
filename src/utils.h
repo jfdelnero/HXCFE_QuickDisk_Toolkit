@@ -24,5 +24,7 @@
 // Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 //
 */
+
 void get_filename(char * path,char * filename);
 void printbuf(unsigned char * buf,int size);
+int is_printable_char(unsigned char c);
