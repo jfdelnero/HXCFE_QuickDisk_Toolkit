@@ -44,6 +44,8 @@
 #include "qd_roland.h"
 #include "qd_akai.h"
 
+#include "trk_utils.h"
+
 int verbose;
 
 int isOption(int argc, char* argv[],char * paramtosearch,char * argtoparam)
@@ -142,6 +144,8 @@ int main(int argc, char* argv[])
 	unsigned int qd_start_sw;
 	unsigned int qd_ready_len;
 	unsigned int qd_ready_data_delay;
+	unsigned int i;
+	unsigned int rawld_bitoffset;
 
 	verbose=0;
 	inbuffer = NULL;
@@ -157,6 +161,8 @@ int main(int argc, char* argv[])
 	qd_start_sw = 500;
 	qd_ready_len = 4520;
 	qd_ready_data_delay = 168;
+
+	rawld_bitoffset = 0;
 
 	// Verbose option...
 	if(isOption(argc,argv,"verbose",0)>0)
@@ -240,6 +246,11 @@ int main(int argc, char* argv[])
 		}
 	}
 
+	if(isOption(argc,argv,"raw_ld_bitoffset",(char*)&tmp)>0)
+	{
+		rawld_bitoffset = atoi(tmp);
+	}
+
 	if(isOption(argc,argv,"generate",0)>0)
 	{
 		printf("qd cells rate : %d cell/s\n",qd_cell_rate);
@@ -259,7 +270,10 @@ int main(int argc, char* argv[])
 			if( inbuffer )
 			{
 				printf("Place track data at 0x%.8X - 0x%.8X\n",track_ptr->offset + track_ptr->start_sw_position + (time_to_bitofs(header_ptr->bitRate,qd_ready_data_delay)/8), track_ptr->offset + track_ptr->start_sw_position + inbuffersize + (time_to_bitofs(header_ptr->bitRate,qd_ready_data_delay)/8));
-				memcpy(&outfilebuf[track_ptr->offset + track_ptr->start_sw_position + (time_to_bitofs(header_ptr->bitRate,qd_ready_data_delay)/8)], inbuffer, inbuffersize);
+				for(i=0;i<(inbuffersize*8);i++)
+				{
+					setbit_inv(outfilebuf,((track_ptr->offset + track_ptr->start_sw_position)*8) + time_to_bitofs(header_ptr->bitRate,qd_ready_data_delay) + i + rawld_bitoffset, getbit_inv(inbuffer,i));
+				}
 				free(inbuffer);
 			}
 
