@@ -28,6 +28,8 @@
 int mfmtobin(unsigned char * input_data,int input_data_size,unsigned char * decod_data,int decod_data_size,int bit_offset,int lastbit);
 int getbit(unsigned char * input_data,int bit_offset);
 void setbit(unsigned char * input_data,int bit_offset,int state);
+int getbit_inv(unsigned char * input_data,int bit_offset);
+void setbit_inv(unsigned char * input_data,int bit_offset,int state);
 void setfieldbit(unsigned char * dstbuffer,unsigned char byte,int bitoffset,int size);
 int chgbitptr(int tracklen,int cur_offset,int offset);
 int slowSearchBitStream(unsigned char * input_data,uint32_t input_data_size,int searchlen,unsigned char * chr_data,uint32_t chr_data_size,uint32_t bit_offset);

@@ -126,6 +126,11 @@ int getbit(unsigned char * input_data,int bit_offset)
 	return ( ( input_data[bit_offset>>3] >> ( 0x7 - (bit_offset&0x7) ) ) ) & 0x01;
 }
 
+int getbit_inv(unsigned char * input_data,int bit_offset)
+{
+	return ( ( input_data[bit_offset>>3] >> ( (bit_offset&0x7) ) ) ) & 0x01;
+}
+
 void setbit(unsigned char * input_data,int bit_offset,int state)
 {
 	if(state)
@@ -135,6 +140,20 @@ void setbit(unsigned char * input_data,int bit_offset,int state)
 	else
 	{
 		input_data[bit_offset>>3] = (unsigned char)( input_data[bit_offset>>3] & ~(0x80 >> ( bit_offset&0x7 ) ) );
+	}
+
+	return;
+}
+
+void setbit_inv(unsigned char * input_data,int bit_offset,int state)
+{
+	if(state)
+	{
+		input_data[bit_offset>>3] = (unsigned char)( input_data[bit_offset>>3] |  (0x01 << ( bit_offset&0x7 ) ) );
+	}
+	else
+	{
+		input_data[bit_offset>>3] = (unsigned char)( input_data[bit_offset>>3] & ~(0x01 << ( bit_offset&0x7 ) ) );
 	}
 
 	return;
