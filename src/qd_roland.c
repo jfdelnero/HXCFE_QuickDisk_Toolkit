@@ -83,6 +83,7 @@ int check_roland_qd(char * filename)
 	wav_hdr wavhdr;
 	qdhfefileformatheader * header_ptr;
 	qdtrack * track_ptr;
+	unsigned char internalname[64];
 
 	f=fopen(filename,"rb");
 	if(f)
@@ -193,6 +194,25 @@ int check_roland_qd(char * filename)
 							{
 								printf(">>>>>> Valid CRC :) !\n");
 							}
+
+							memset(internalname,0,sizeof(internalname));
+							i = 0;
+							while( i < 16 && test_buf[ 0xC + i ]!=0xD) 
+							{
+								if(is_printable_char(test_buf[ 0xC + i ]))
+									internalname[i] = test_buf[ 0xC + i ];
+								else
+									internalname[i] = '_';
+								i++;
+							}
+							i = strlen((char*)internalname) - 1;
+							while(i>0 && internalname[i] == '_')
+							{
+								internalname[i] = 0;
+								i--;
+							}
+							printf("Internal Name :%s\n",internalname);
+
 						break;
 
 						case 2:
