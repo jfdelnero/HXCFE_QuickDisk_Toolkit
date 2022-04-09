@@ -51,12 +51,12 @@ Options:
   -qdstartsw 			: QD start switch position (ms)
   -qdreadylen 			: QD ready length
   -qddatadelay 			: QD ready to data delay
-  -loadraw 			    : Load a raw mfm track
+  -loadraw 				: Load a raw mfm track
   -loadmo5qd 			: Load Thomson MO5 QD file
   -generate 			: Generate a HxC QD file
   -checkmo5qd 			: Test a MO5 formatted HxC QD file
   -checkrolandqd 		: Test a Roland formatted HxC QD file
   -checkakaiqd 			: Test a Akai formatted HxC QD file
-  -help 			    : This help
+  -help 				: This help
 ```
 
