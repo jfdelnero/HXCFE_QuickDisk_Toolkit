@@ -38,12 +38,13 @@
 #include <stdint.h>
 
 #include "crc.h"
-#include "utils.h"
 
 #include "hfe_qd.h"
 #include "trk_utils.h"
 
 #include "wave.h"
+
+#include "utils.h"
 
 #define DEFAULT_NUMBER_OF_CHANNELS 1
 #define DEFAULT_SAMPLERATE 32000
@@ -107,6 +108,13 @@ int check_akai_qd(char * filename)
 			fclose(f);
 
 			header_ptr = (qdhfefileformatheader * )file;
+
+			if(check_and_fix_qd_header(header_ptr, filesize) < 0)
+			{
+				free(file);
+				return -1;
+			}
+
 			track_ptr = (qdtrack *)&file[header_ptr->track_list_offset];
 
 			for(i=track_ptr->offset;i<track_ptr->track_len;i++)

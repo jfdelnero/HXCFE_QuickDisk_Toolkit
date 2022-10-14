@@ -36,8 +36,6 @@
 
 #include <stdint.h>
 
-#include "utils.h"
-
 #include "hfe_qd.h"
 
 #include "qd_mo5.h"
@@ -45,6 +43,8 @@
 #include "qd_akai.h"
 
 #include "trk_utils.h"
+
+#include "utils.h"
 
 int verbose;
 
@@ -150,7 +150,7 @@ int main(int argc, char* argv[])
 	verbose=0;
 	inbuffer = NULL;
 
-	printf("HxC Floppy Emulator : QD Floppy image file tool v0.0.2.2\n");
+	printf("HxC Floppy Emulator : QD Floppy image file tool v0.0.2.4\n");
 	printf("Copyright (C) 2006-2022 Jean-Francois DEL NERO\n");
 	printf("This program comes with ABSOLUTELY NO WARRANTY\n");
 	printf("This is free software, and you are welcome to redistribute it\n");
@@ -292,7 +292,7 @@ int main(int argc, char* argv[])
 			free(outfilebuf);
 		}
 	}
-	
+
 	if(isOption(argc,argv,"checkmo5qd",(char*)&filename)>0)
 	{
 		check_mo5_qd(filename);
@@ -326,5 +326,3 @@ int main(int argc, char* argv[])
 
 	return 0;
 }
-
-

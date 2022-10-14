@@ -38,10 +38,11 @@
 #include <stdint.h>
 
 #include "crc.h"
-#include "utils.h"
 
 #include "hfe_qd.h"
 #include "trk_utils.h"
+
+#include "utils.h"
 
 #include "wave.h"
 
@@ -105,6 +106,13 @@ int check_roland_qd(char * filename)
 			fclose(f);
 
 			header_ptr = (qdhfefileformatheader * )file;
+
+			if(check_and_fix_qd_header(header_ptr, filesize) < 0)
+			{
+				free(file);
+				return -1;
+			}
+
 			track_ptr = (qdtrack *)&file[header_ptr->track_list_offset];
 
 			for(i=track_ptr->offset;i<track_ptr->track_len;i++)
@@ -197,7 +205,7 @@ int check_roland_qd(char * filename)
 
 							memset(internalname,0,sizeof(internalname));
 							i = 0;
-							while( i < 16 && test_buf[ 0xC + i ]!=0xD) 
+							while( i < 16 && test_buf[ 0xC + i ]!=0xD)
 							{
 								if(is_printable_char(test_buf[ 0xC + i ]))
 									internalname[i] = test_buf[ 0xC + i ];

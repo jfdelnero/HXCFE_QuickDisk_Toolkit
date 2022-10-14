@@ -36,10 +36,10 @@
 
 #include <stdint.h>
 
-#include "utils.h"
-
 #include "hfe_qd.h"
 #include "trk_utils.h"
+
+#include "utils.h"
 
 #define PREAMBULE_SIZE 2500
 #define ENDTRACK_SIZE 128
@@ -183,9 +183,10 @@ int check_mo5_qd(char * filename)
 	unsigned char * file;
 	unsigned char * test_buf;
 	unsigned char syncword[16],checksum;
+	qdhfefileformatheader * header_ptr;
 
 	printf("Checking MO5 %s...\n",filename);
-	
+
 	f = fopen(filename,"rb");
 	if(f)
 	{
@@ -197,11 +198,19 @@ int check_mo5_qd(char * filename)
 		if( file)
 		{
 			test_buf = malloc(1024*80);
-		
+
 			if(fread(file,filesize,1,f) != 1)
 				printf("!!!!! Error while reading %s !!!!!!\n",filename);
 
 			fclose(f);
+
+			header_ptr = (qdhfefileformatheader * )file;
+
+			if(check_and_fix_qd_header(header_ptr, filesize) < 0)
+			{
+				free(file);
+				return -1;
+			}
 
 			for(i=0;i<filesize;i++)
 			{
@@ -256,7 +265,7 @@ int check_mo5_qd(char * filename)
 						{
 							checksum += test_buf[k];
 						}
-					
+
 						if(checksum == test_buf[1+128])
 						{
 							printf("found : Sector %d (%d) - %d - (delta sect :%d delta pos : %d)\n",sector,(founddat -found),found,sector-lastsector,found-lastfound);
@@ -272,7 +281,7 @@ int check_mo5_qd(char * filename)
 
 				found += (0xAF*2) - 0x8;
 			}
-			
+
 			free(test_buf);
 			free(file);
 		}
@@ -280,8 +289,8 @@ int check_mo5_qd(char * filename)
 	else
 	{
 		printf("Error can't open %s !...\n",filename);
-	}	
-	
+	}
+
 
 	return 0;
 }

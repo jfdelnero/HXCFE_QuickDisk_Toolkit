@@ -28,6 +28,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "hfe_qd.h"
 
 void get_filename(char * path,char * filename)
 {
@@ -124,4 +125,38 @@ void printbuf(void * buf,int size)
 	}
 
 	printf("%s\n", str);
+}
+
+int check_and_fix_qd_header(qdhfefileformatheader * header_ptr, int size)
+{
+	if(size < sizeof(qdhfefileformatheader))
+	{
+		printf("Unrecognized QD file format ... :-(\n");
+		return -2;
+	}
+
+	if(memcmp(header_ptr->HEADERSIGNATURE,"HXCQDDRV",8))
+	{
+		if(!memcmp(&header_ptr->HEADERSIGNATURE[3],"QD",2))
+		{
+			printf("Warning : Malformed QD file header ! Patching missing parameters.\n");
+
+			header_ptr->number_of_track = 1;
+			header_ptr->number_of_side = 1;
+			header_ptr->track_encoding = 0;
+			header_ptr->bitRate = 203389; // cells rate
+			header_ptr->track_list_offset = 0x200;
+
+			return 0;
+		}
+		else
+		{
+			printf("Unrecognized QD file format ... :-(\n");
+			return -1;
+		}
+	}
+	else
+	{
+		return 1;
+	}
 }

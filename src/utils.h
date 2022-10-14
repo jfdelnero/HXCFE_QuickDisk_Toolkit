@@ -28,3 +28,4 @@
 void get_filename(char * path,char * filename);
 void printbuf(unsigned char * buf,int size);
 int is_printable_char(unsigned char c);
+int check_and_fix_qd_header(qdhfefileformatheader * header_ptr, int size);
